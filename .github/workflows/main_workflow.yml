@@ -1,0 +1,47 @@
+name: Postman testes API
+
+on: push
+
+jobs:
+  testes-api:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+    
+      - name: Install newman
+        run: npm install -g newman
+        
+      - name: Install newman reporter
+        run: npm install -g newman-reporter-htmlextra
+
+      - name: Make Directory for results
+        run: mkdir -p testResults
+
+      - name: Run Postman Tests
+        id: api-tests
+        run: newman run testes/Estudo-serverest.postman_collection.json -e testes/Serverest.postman_environment.json -r htmlextra --reporter-htmlextra-export testResults/index.html
+
+      - name: Upload test results
+        id: upload-tests-results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Reports
+          path: testResults
+
+      - name: Deploy report to Github Pages
+        id: deploy-report
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: testResults
+          keep_files: true
+          

@@ -1,0 +1,3483 @@
+{
+	"info": {
+		"_postman_id": "c58a7a00-dd92-48cf-8245-195ef05b3551",
+		"name": "Estudo-serverest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14906742"
+	},
+	"item": [
+		{
+			"name": "Setup tests",
+			"item": [
+				{
+					"name": "install postman BDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable('postmanBDD', responseBody);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://bigstickcarpet.com/postman-bdd/dist/postman-bdd.js",
+							"protocol": "http",
+							"host": [
+								"bigstickcarpet",
+								"com"
+							],
+							"path": [
+								"postman-bdd",
+								"dist",
+								"postman-bdd.js"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Cadastrar usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(globals.postmanBDD)\r",
+									"\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"describe('Cadastrar usuário', () => {\r",
+									"\r",
+									"    it(\"Status code should be '201 Created'\", () => {\r",
+									"        response.should.have.status(201)\r",
+									"        pm.response.to.have.status(\"Created\")\r",
+									"    })\r",
+									"\r",
+									"    it(\"Content-Type header should be application/json\", () => {\r",
+									"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"    })\r",
+									"\r",
+									"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+									"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+									"    })\r",
+									"\r",
+									"    pm.environment.set(\"loginUserId\", jsonData._id)\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Ciclano da Silva\",\r\n  \"email\": \"{{loginEmail}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(globals.postmanBDD)\r",
+									"\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"describe('Login success', () => {\r",
+									"\r",
+									"    it(\"Status code should be '200 OK'\", () => {\r",
+									"        response.should.have.status(200)\r",
+									"        pm.response.to.have.status(\"OK\")\r",
+									"    })\r",
+									"\r",
+									"    it(\"Content-Type header should be application/json\", () => {\r",
+									"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"    })\r",
+									"\r",
+									"    it(\"The message should be 'Login realizado com sucesso'\", () => {\r",
+									"        pm.expect(jsonData.message).to.eql('Login realizado com sucesso')\r",
+									"    })\r",
+									"\r",
+									"    const token = jsonData.authorization.replace('Bearer ', '')\r",
+									"    pm.environment.set(\"token\", token)\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{loginEmail}}\",\r\n  \"password\": \"teste\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "Success Scenarios",
+					"item": [
+						{
+							"name": "Listar usuários",
+							"item": [
+								{
+									"name": "Listar usuários cadastrados",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Listar usuários cadastrados', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"Usuários should exist and be an array\", () => {\r",
+													"        pm.expect(jsonData.usuarios).to.be.an('array')\r",
+													"        pm.expect(jsonData.usuarios).not.be.empty\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cadastrar usuário",
+							"item": [
+								{
+									"name": "Cadastrar usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"userId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuarios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar usuário por ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar usuário por ID', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The name should be 'Fulano da Silva'\", () => {\r",
+													"        pm.expect(jsonData.nome).to.eql('Fulano da Silva')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Editar usuário",
+							"item": [
+								{
+									"name": "Editar usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Editar usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro alterado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro alterado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Siclano da Silva\",\r\n  \"email\": \"beltran4o@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar usuário editado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar usuário editado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The name should be 'Siclano da Silva'\", () => {\r",
+													"        pm.expect(jsonData.nome).to.eql('Siclano da Silva')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Excluir usuário",
+							"item": [
+								{
+									"name": "Excluir usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar usuário deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar usuário deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Usuário não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Usuário não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Exception Scenarios",
+					"item": [
+						{
+							"name": "Email already registred",
+							"item": [
+								{
+									"name": "Cadastrar usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"userId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuarios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar fluxo com email já cadastrado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar fluxo com email já cadastrado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Este email já está sendo usado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Este email já está sendo usado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuarios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar usuário deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar usuário deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Usuário não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Usuário não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Nenhum registro excluído",
+							"item": [
+								{
+									"name": "Cadastrar usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"userId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuarios",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir usuário",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar usuário deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar usuário deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Usuário não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Usuário não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar mensagem de exclusão",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar mensagem de exclusão', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Nenhum registro excluído'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Nenhum registro excluído')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuarios/{{userId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuarios",
+												"{{userId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Success Scenarios",
+					"item": [
+						{
+							"name": "Listar produtos cadastrados",
+							"item": [
+								{
+									"name": "Listar produtos cadastrados",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Listar produtos cadastrados', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"   it(\"Produtos should exist and be an array\", () => {\r",
+													"        pm.expect(jsonData.produtos).to.be.an('array')\r",
+													"        pm.expect(jsonData.produtos).not.be.empty\r",
+													"   })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cadastrar produto",
+							"item": [
+								{
+									"name": "Cadastrar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"productId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A40\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar produto por ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar produto por ID', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The name should be 'Astro A40'\", () => {\r",
+													"        pm.expect(jsonData.nome).to.eql('Astro A40')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Editar produto",
+							"item": [
+								{
+									"name": "Editar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Editar produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro alterado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro alterado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A40 plus\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar produto editado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar produto editado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The name should be 'Astro A40 plus'\", () => {\r",
+													"        pm.expect(jsonData.nome).to.eql('Astro A40 plus')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Excluir produto",
+							"item": [
+								{
+									"name": "Excluir produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar produto deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar produto deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Produto não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Produto não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Exception Scenarios",
+					"item": [
+						{
+							"name": "Produto já cadastrado",
+							"item": [
+								{
+									"name": "Cadastrar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"productId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A40\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar fluxo com produto já cadastrado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar fluxo com produto já cadastrado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Já existe produto com esse nome'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Já existe produto com esse nome')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A40\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar produto deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar usuário deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Produto não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Produto não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Nenhum registro excluído",
+							"item": [
+								{
+									"name": "Cadastrar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"productId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A40\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir usuário', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar produto deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar produto deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Produto não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Produto não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar mensagem de exclusão",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar mensagem de exclusão', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Nenhum registro excluído'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Nenhum registro excluído')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Carrinhos",
+			"item": [
+				{
+					"name": "Success Scenarios",
+					"item": [
+						{
+							"name": "Listar carrinhos cadastrados",
+							"item": [
+								{
+									"name": "Listar carrinhos cadastrados",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Listar carrinhos cadastrados', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"   it(\"Carrinhos should exist and be an array\", () => {\r",
+													"        pm.expect(jsonData.carrinhos).to.be.an('array')\r",
+													"        pm.expect(jsonData.carrinhos).not.be.empty\r",
+													"   })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cadastrar carrinho",
+							"item": [
+								{
+									"name": "Cadastrar carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar carrinhos', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"cartId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"BeeJh5lz3k6kSIzA\",\r\n            \"quantidade\": 2\r\n        },\r\n        {\r\n            \"idProduto\": \"K6leHdftCeOJj8BJ\",\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar carrinho por ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar carrinho por ID', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"//    it(\"The name should be 'Astro A40'\", () => {\r",
+													"//        pm.expect(jsonData.nome).to.eql('Astro A40')\r",
+													"//    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/{{cartId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"{{cartId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Concluir compra",
+							"item": [
+								{
+									"name": "Concluir compra",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"concluir-compra"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar compra concluída",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar produto deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Carrinho não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Carrinho não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Exception Scenarios",
+					"item": [
+						{
+							"name": "Carrinho já cadastrado",
+							"item": [
+								{
+									"name": "Cadastrar primeiro produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar primeiro produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"firstProductId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A10\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 4\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar segundo produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar segundo produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"secondProductId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"nome\": \"Astro A30\",\r\n    \"preco\": 500,\r\n    \"descricao\": \"Fone\",\r\n    \"quantidade\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"cartId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"{{firstProductId}}\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"idProduto\": \"{{secondProductId}}\",\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar fluxo com carrinho já cadastrado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar fluxo com carrinho já cadastrado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Não é permitido ter mais de 1 carrinho'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Não é permitido ter mais de 1 carrinho')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"BeeJh5lz3k6kSIzA\",\r\n            \"quantidade\": 2\r\n        },\r\n        {\r\n            \"idProduto\": \"K6leHdftCeOJj8BJ\",\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"concluir-compra"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir primeiro produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{firstProductId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{firstProductId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir segundo produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{secondProductId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{secondProductId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Nenhum registro excluído",
+							"item": [
+								{
+									"name": "Cadastrar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar primeiro produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"productId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A20\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 4\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"cartId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"{{productId}}\",\r\n            \"quantidade\": 3\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"concluir-compra"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar carrinho deletado",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar carrinho deletado', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Carrinho não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Carrinho não encontrado')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/{{cartId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"{{cartId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Validar mensagem de exclusão",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Validar mensagem de exclusão', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Não foi encontrado carrinho para esse usuário'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Não foi encontrado carrinho para esse usuário')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"concluir-compra"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Produto não encontrado",
+							"item": [
+								{
+									"name": "Cadastrar carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+													"        response.should.have.status(400)\r",
+													"        pm.response.to.have.status(\"Bad Request\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Produto não encontrado'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Produto não encontrado')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"cartId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"111111111111\",\r\n            \"quantidade\": 1\r\n        },\r\n        {\r\n            \"idProduto\": \"222222222222\",\r\n            \"quantidade\": 3\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Validar que produtos voltaram para o estoque",
+							"item": [
+								{
+									"name": "Cadastrar produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"productId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"nome\": \"Astro A60\",\r\n  \"preco\": 699,\r\n  \"descricao\": \"Fone\",\r\n  \"quantidade\": 4\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/produtos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cadastrar carrinho",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cadastrar carrinho', () => {\r",
+													"\r",
+													"    it(\"Status code should be '201 Created'\", () => {\r",
+													"        response.should.have.status(201)\r",
+													"        pm.response.to.have.status(\"Created\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Cadastro realizado com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Cadastro realizado com sucesso')\r",
+													"    })\r",
+													"\r",
+													"    pm.environment.set(\"cartId\", jsonData._id)\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"{{productId}}\",\r\n            \"quantidade\": 3\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Cancelar compra",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Cancelar compra', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso. Estoque dos produtos reabastecido'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso. Estoque dos produtos reabastecido')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/carrinhos/cancelar-compra",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"carrinhos",
+												"cancelar-compra"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar produto por ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Buscar produto por ID', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The quantity should be '4'\", () => {\r",
+													"        pm.expect(jsonData.quantidade).to.eql(4)\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Excluir produto",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(globals.postmanBDD)\r",
+													"\r",
+													"const jsonData = pm.response.json()\r",
+													"\r",
+													"describe('Excluir produto', () => {\r",
+													"\r",
+													"    it(\"Status code should be '200 OK'\", () => {\r",
+													"        response.should.have.status(200)\r",
+													"        pm.response.to.have.status(\"OK\")\r",
+													"    })\r",
+													"\r",
+													"    it(\"Content-Type header should be application/json\", () => {\r",
+													"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+													"    })\r",
+													"\r",
+													"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+													"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+													"    })\r",
+													"\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/produtos/{{productId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"produtos",
+												"{{productId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Excluir usuário",
+			"item": [
+				{
+					"name": "Excluir usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(globals.postmanBDD)\r",
+									"\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"describe('Excluir usuário', () => {\r",
+									"\r",
+									"    it(\"Status code should be '200 OK'\", () => {\r",
+									"        response.should.have.status(200)\r",
+									"        pm.response.to.have.status(\"OK\")\r",
+									"    })\r",
+									"\r",
+									"    it(\"Content-Type header should be application/json\", () => {\r",
+									"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"    })\r",
+									"\r",
+									"    it(\"The message should be 'Registro excluído com sucesso'\", () => {\r",
+									"        pm.expect(jsonData.message).to.eql('Registro excluído com sucesso')\r",
+									"    })\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/{{loginUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								"{{loginUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar usuário deletado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(globals.postmanBDD)\r",
+									"\r",
+									"const jsonData = pm.response.json()\r",
+									"\r",
+									"describe('Validar usuário deletado', () => {\r",
+									"\r",
+									"    it(\"Status code should be '400 Bad Request'\", () => {\r",
+									"        response.should.have.status(400)\r",
+									"        pm.response.to.have.status(\"Bad Request\")\r",
+									"    })\r",
+									"\r",
+									"    it(\"Content-Type header should be application/json\", () => {\r",
+									"        pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"    })\r",
+									"\r",
+									"    it(\"The message should be 'Usuário não encontrado'\", () => {\r",
+									"        pm.expect(jsonData.message).to.eql('Usuário não encontrado')\r",
+									"    })\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/{{loginUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								"{{loginUserId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
